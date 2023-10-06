@@ -1,0 +1,47 @@
+name: CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  DOCKER_REGISTRY_SERVER_URL: https://docker.io
+  IMAGE_NAME: matthaeusheer/floaty-backend
+  IMAGE_TAG: local-h2
+  SPRING_PROFILES_ACTIVE: local-h2
+  RESOURCE_GROUP_NAME: rgr-floaty-chn
+  APP_SERVICE_NAME: wa-floaty-chn
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Run Tests
+        run: |
+          docker run --rm -v $PWD:/app -w /app maven:3.8.6-eclipse-temurin-17-alpine mvn test --batch-mode
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Login to Docker Registry
+        run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login --username ${{ secrets.REGISTRY_USER }} --password-stdin
+      - name: Build and Push Docker Image
+        run: |
+          docker build --tag $IMAGE_NAME:$IMAGE_TAG --build-arg spring_profile=${SPRING_PROFILES_ACTIVE} .
+          docker push $IMAGE_NAME:$IMAGE_TAG
+
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Azure App Service
+        run: |
+          docker run --rm -e AZ_EBILL_SERVICE_PRINCIPAL_ID_SIX -e AZ_FLOATY_SERVICE_PRINCIPAL_SECRET_SIX -e AZ_FLOATY_TENANT_ID_SIX mcr.microsoft.com/azure-cli az login --service-principal -u ${{ secrets.AZ_EBILL_SERVICE_PRINCIPAL_ID_SIX }} -p ${{ secrets.AZ_EBILL_SERVICE_PRINCIPAL_SECRET_SIX }} --tenant ${{ secrets.AZ_EBILL_TENANT_ID_SIX }}
+          docker run --rm mcr.microsoft.com/azure-cli az webapp config container set --docker-custom-image-name $IMAGE_NAME:$IMAGE_TAG --docker-registry-server-url $DOCKER_REGISTRY_SERVER_URL --name $APP_SERVICE_NAME --resource-group $RESOURCE_GROUP_NAME

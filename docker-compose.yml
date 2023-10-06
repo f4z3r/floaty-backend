@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  floaty-backend:
+    image: matthaeusheer/floaty-backend:latest
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - backend-network
+    depends_on:
+      - floaty-db-service
+  floaty-db-service:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    networks:
+      - backend-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=floaty-db
+      - MYSQL_USER=db-user
+      - MYSQL_PASSWORD=db-user-pw
+  frontend:
+    image: matthaeusheer/floaty-frontend:latest
+    ports:
+      - "81:80"
+networks:
+  backend-network:
+    driver: bridge

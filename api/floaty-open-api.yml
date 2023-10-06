@@ -46,6 +46,70 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+  /flights/{userId}:
+    get:
+      tags:
+        - flights
+      summary: Find all flights for a given User.
+      description: Returns a list of Flights for a User.
+      operationId: getFlights
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Flight'
+  /flight/{flightId}:
+    delete:
+      tags:
+        - flights
+      summary: Delete a Flight by ID.
+      description: Deletes a single flight by its ID.
+      operationId: deleteFlightById
+      parameters:
+        - name: flightId
+          in: path
+          description: ID of the flight to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: No content, successful deletion
+        '404':
+          description: Flight not found
+  /flights:
+    post:
+      tags:
+        - flights
+      summary: Post flight for a given User
+      description: Register a new flight
+      operationId: createFlight
+      requestBody:
+        description: Optional description in *Markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Flight'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Flight'
+
 
 
 components:
@@ -65,3 +129,34 @@ components:
           type: string
           example: 'Free Willy'
           description: 'The name of the user.'
+    Flight:
+      type: object
+      required:
+        - userId
+        - date
+        - takeoff
+      properties:
+        userId:
+          type: string
+          description: 'Owner of the flight'
+          maxLength: 14
+          example: 'USER0000123456'
+          pattern: 'USER[0-9]{10}'
+        flightId:
+          type: string
+          description: 'Unique flight id'
+          maxLength: 64
+          example: AA55BE15-8232-4CE5-A270-CEBCE6EC91E3
+          pattern: '[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}'
+        date:
+          type: string
+          example: '22.03.23'
+          description: 'Date of the flight'
+        takeoff:
+          type: string
+          example: 'Titlis'
+          description: 'Take off location'
+        duration:
+          type: integer
+          example: 60
+          description: 'Duation in minutes'

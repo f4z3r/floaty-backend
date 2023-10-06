@@ -1,4 +1,4 @@
-package ch.floaty.user;
+package ch.floaty.domain;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

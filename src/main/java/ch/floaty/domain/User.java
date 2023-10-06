@@ -1,4 +1,4 @@
-package ch.floaty.user;
+package ch.floaty.domain;
 
 import javax.persistence.*;
 

@@ -14,6 +14,11 @@ public class Flight {
 
     private String takeoff;
 
+    private Long duration;
+
+    public Long getDuration(){return duration;}
+    public void setDuration (Long duration) {this.duration = duration;}
+
     public Long getId() {
         return id;
     }

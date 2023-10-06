@@ -4,6 +4,7 @@ CREATE TABLE t_flight
     id INTEGER NOT NULL,
     userid INTEGER NOT NULL,
     takeoff VARCHAR(128) NOT NULL,
+    duration INTEGER NOT NULL,
     PRIMARY KEY (id)
 );
 

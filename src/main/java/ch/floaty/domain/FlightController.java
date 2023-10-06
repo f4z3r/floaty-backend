@@ -1,5 +1,7 @@
 package ch.floaty.domain;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -29,6 +31,14 @@ public class FlightController {
         return userRepository.findById(userId)
                 .map(flightRepository::findByUser)
                 .orElse(Collections.emptyList());
+    }
+
+    @PostMapping("/flights")
+    public Flight saveUser(@Validated @RequestBody Flight flight) {
+        System.out.println("Save flight.");
+        Long flightId = ((List<Flight>)flightRepository.findAll()).stream().map(Flight::getId).max(Long::compareTo).orElse(0L) + 1;
+        flight.setId(flightId);
+        return flightRepository.save(flight);
     }
 
 }

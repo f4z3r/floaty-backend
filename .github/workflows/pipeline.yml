@@ -7,7 +7,7 @@ env:
 jobs:
   deploy_to_production:
     runs-on: ubuntu-latest
-    name: deploy to production with artifact
+    name: Deploy to Azure Spring App
     steps:
       - name: Checkout GitHub Action
         uses: actions/checkout@v2
@@ -27,7 +27,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: deploy to production with artifact
+      - name: Deploy
         uses: azure/spring-apps-deploy@v1
         with:
           azure-subscription: ${{ env.AZURE_SUBSCRIPTION }}

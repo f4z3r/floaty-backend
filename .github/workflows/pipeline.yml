@@ -25,4 +25,4 @@ jobs:
           service-name: floaty-backend
           app-name: floaty-backend
           use-staging-deployment: false
-          package: ${{ env.ASC_PACKAGE_PATH }}
+          package: ${{ env.ASC_PACKAGE_PATH }}/**/*.jar

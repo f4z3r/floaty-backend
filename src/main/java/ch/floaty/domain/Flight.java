@@ -10,7 +10,7 @@ public class Flight {
         this.user = user;
         this.takeoff = takeoff;
         this.duration = duration;
-        this.flightdate=date;
+        this.flightdate = date;
     }
 
     public Flight() {

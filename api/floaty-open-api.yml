@@ -111,7 +111,6 @@ paths:
                 $ref: '#/components/schemas/Flight'
 
 
-
 components:
   schemas:
     User:
@@ -136,18 +135,14 @@ components:
         - date
         - takeoff
       properties:
+        flightId:
+          type: integer
+          description: 'Unique flight id'
+          maxLength: 14
         userId:
-          type: string
+          type: integer
           description: 'Owner of the flight'
           maxLength: 14
-          example: 'USER0000123456'
-          pattern: 'USER[0-9]{10}'
-        flightId:
-          type: string
-          description: 'Unique flight id'
-          maxLength: 64
-          example: AA55BE15-8232-4CE5-A270-CEBCE6EC91E3
-          pattern: '[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}'
         date:
           type: string
           example: '22.03.23'

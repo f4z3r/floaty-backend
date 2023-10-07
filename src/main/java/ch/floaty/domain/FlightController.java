@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class FlightController {
@@ -27,16 +28,28 @@ public class FlightController {
     }
 
     @GetMapping("/flights/{userId}")
-    public List<Flight> findFlightsByUser(@PathVariable Long userId) {
+    public List<FlightDto> findFlightsByUser(@PathVariable Long userId) {
         return userRepository.findById(userId)
-                .map(flightRepository::findByUser)
+                .map(user -> {
+                    List<Flight> flights = flightRepository.findByUser(user);
+                    return flights.stream()
+                            .map(flight -> new FlightDto(
+                                    flight.getId(),
+                                    user.getId(),
+                                    flight.getTakeoff(),
+                                    flight.getDuration()))
+                            .collect(Collectors.toList());
+                })
                 .orElse(Collections.emptyList());
     }
 
     @PostMapping("/flights")
-    public Flight saveUser(@Validated @RequestBody Flight flight) {
+    public Flight saveUser(@Validated @RequestBody FlightDto flightdto) {
         System.out.println("Save flight.");
-        Long flightId = ((List<Flight>)flightRepository.findAll()).stream().map(Flight::getId).max(Long::compareTo).orElse(0L) + 1;
+        User user = new User();
+        user.setId(flightdto.getUserId());
+        Flight flight = new Flight(user, flightdto.getTakeoff(), flightdto.getDuration());
+        Long flightId = ((List<Flight>) flightRepository.findAll()).stream().map(Flight::getId).max(Long::compareTo).orElse(0L) + 1;
         flight.setId(flightId);
         return flightRepository.save(flight);
     }

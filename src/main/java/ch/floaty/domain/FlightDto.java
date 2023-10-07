@@ -1,27 +1,24 @@
 package ch.floaty.domain;
 
-import javax.persistence.*;
+import javax.persistence.Id;
 
-@Entity()
-@Table(name = "t_flight")
-public class Flight {
+public class FlightDto{
 
-    public Flight (User user, String takeoff, Long duration){
-        this.user = user;
-        this.takeoff=takeoff;
-        this.duration=duration;
-    }
-    public Flight (){}
     @Id
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "userid")
-    private User user;
+    private Long userId;
 
     private String takeoff;
 
     private Long duration;
+
+    public FlightDto(Long id, Long userId, String takeoff, Long duration) {
+        this.id=id;
+        this.userId=userId;
+        this.takeoff=takeoff;
+        this.duration=duration;
+    }
 
     public Long getDuration(){return duration;}
     public void setDuration (Long duration) {this.duration = duration;}
@@ -34,12 +31,12 @@ public class Flight {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserID(Long userId) {
+        this.userId = userId;
     }
 
     public String getTakeoff() {

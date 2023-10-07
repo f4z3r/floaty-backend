@@ -6,12 +6,16 @@ import javax.persistence.*;
 @Table(name = "t_flight")
 public class Flight {
 
-    public Flight (User user, String takeoff, Long duration){
+    public Flight(User user, String takeoff, Long duration, String date) {
         this.user = user;
-        this.takeoff=takeoff;
-        this.duration=duration;
+        this.takeoff = takeoff;
+        this.duration = duration;
+        this.flightdate=date;
     }
-    public Flight (){}
+
+    public Flight() {
+    }
+
     @Id
     private Long id;
 
@@ -19,12 +23,27 @@ public class Flight {
     @JoinColumn(name = "userid")
     private User user;
 
+    public String getFlightdate() {
+        return flightdate;
+    }
+
+    public void setFlightdate(String flightdate) {
+        this.flightdate = flightdate;
+    }
+
+    private String flightdate;
+
     private String takeoff;
 
     private Long duration;
 
-    public Long getDuration(){return duration;}
-    public void setDuration (Long duration) {this.duration = duration;}
+    public Long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Long duration) {
+        this.duration = duration;
+    }
 
     public Long getId() {
         return id;

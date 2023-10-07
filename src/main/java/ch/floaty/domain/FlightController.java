@@ -37,7 +37,8 @@ public class FlightController {
                                     flight.getId(),
                                     user.getId(),
                                     flight.getTakeoff(),
-                                    flight.getDuration()))
+                                    flight.getDuration(),
+                                    flight.getFlightdate()))
                             .collect(Collectors.toList());
                 })
                 .orElse(Collections.emptyList());
@@ -48,7 +49,7 @@ public class FlightController {
         System.out.println("Save flight.");
         User user = new User();
         user.setId(flightdto.getUserId());
-        Flight flight = new Flight(user, flightdto.getTakeoff(), flightdto.getDuration());
+        Flight flight = new Flight(user, flightdto.getTakeoff(), flightdto.getDuration(), flightdto.getFlightdate());
         Long flightId = ((List<Flight>) flightRepository.findAll()).stream().map(Flight::getId).max(Long::compareTo).orElse(0L) + 1;
         flight.setId(flightId);
         return flightRepository.save(flight);

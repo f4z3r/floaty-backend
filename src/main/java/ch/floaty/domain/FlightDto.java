@@ -2,7 +2,7 @@ package ch.floaty.domain;
 
 import javax.persistence.Id;
 
-public class FlightDto{
+public class FlightDto {
 
     @Id
     private Long id;
@@ -13,15 +13,31 @@ public class FlightDto{
 
     private Long duration;
 
-    public FlightDto(Long id, Long userId, String takeoff, Long duration) {
-        this.id=id;
-        this.userId=userId;
-        this.takeoff=takeoff;
-        this.duration=duration;
+    public String getFlightdate() {
+        return flightdate;
     }
 
-    public Long getDuration(){return duration;}
-    public void setDuration (Long duration) {this.duration = duration;}
+    public void setFlightdate(String flightdate) {
+        this.flightdate = flightdate;
+    }
+
+    private String flightdate;
+
+    public FlightDto(Long id, Long userId, String takeoff, Long duration, String date) {
+        this.id = id;
+        this.userId = userId;
+        this.takeoff = takeoff;
+        this.duration = duration;
+        this.flightdate = date;
+    }
+
+    public Long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Long duration) {
+        this.duration = duration;
+    }
 
     public Long getId() {
         return id;

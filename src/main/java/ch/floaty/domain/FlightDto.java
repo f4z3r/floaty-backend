@@ -7,7 +7,7 @@ public class FlightDto {
     @Id
     private Long id;
 
-    private Long userId;
+    private Long userid;
 
     private String takeoff;
 
@@ -23,9 +23,9 @@ public class FlightDto {
 
     private String flightdate;
 
-    public FlightDto(Long id, Long userId, String takeoff, Long duration, String date) {
+    public FlightDto(Long id, Long userid, String takeoff, Long duration, String date) {
         this.id = id;
-        this.userId = userId;
+        this.userid = userid;
         this.takeoff = takeoff;
         this.duration = duration;
         this.flightdate = date;
@@ -47,12 +47,12 @@ public class FlightDto {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getUserid() {
+        return userid;
     }
 
     public void setUserID(Long userId) {
-        this.userId = userId;
+        this.userid = userId;
     }
 
     public String getTakeoff() {

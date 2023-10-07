@@ -47,7 +47,7 @@ public class FlightController {
     public Flight saveUser(@Validated @RequestBody FlightDto flightdto) {
         System.out.println("Save flight.");
         User user = new User();
-        user.setId(flightdto.getUserId());
+        user.setId(flightdto.getUserid());
         Flight flight = new Flight(user, flightdto.getTakeoff(), flightdto.getDuration(), flightdto.getFlightdate());
         Long flightId = ((List<Flight>) flightRepository.findAll()).stream().map(Flight::getId).max(Long::compareTo).orElse(0L) + 1;
         flight.setId(flightId);

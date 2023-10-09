@@ -1,5 +1,11 @@
-package ch.floaty.domain;
+package ch.floaty.controller;
 
+import ch.floaty.domain.Flight;
+import ch.floaty.domain.User;
+import ch.floaty.domain.IUserRepository;
+import ch.floaty.generated.FlightDto;
+import ch.floaty.generated.UserDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -12,46 +18,54 @@ import java.util.Optional;
 
 import static java.lang.Boolean.*;
 import static java.lang.Boolean.FALSE;
+import static java.util.stream.Collectors.toList;
 
 @RestController
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final IUserRepository IUserRepository;
+    private static final ModelMapper modelMapper = new ModelMapper();
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(IUserRepository IUserRepository) {
+        this.IUserRepository = IUserRepository;
     }
 
     @GetMapping("/users")
-    public List<User> findAllUsers() {
-        System.out.println("Find all users.");
-        return (List<User>) userRepository.findAll();
+    public List<UserDto> findAllUsers() {
+        List<User> users = (List<User>) IUserRepository.findAll();
+        return users.stream().map(UserController::toUserDto).collect(toList());
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> findUserById(@PathVariable(value = "id") long id) {
-        System.out.println("Find user by ID.");
-        Optional<User> user = userRepository.findById(id);
-        return user.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<UserDto> findUserById(@PathVariable(value = "id") long id) {
+        Optional<User> user = IUserRepository.findById(id);
+        return user.map(value -> ResponseEntity.ok().body(toUserDto(value)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/users")
-    public User saveUser(@Validated @RequestBody User user) {
-        System.out.println("Save user.");
-        Long userId = ((List<User>)userRepository.findAll()).stream().map(User::getId).max(Long::compareTo).orElse(0L) + 1;
-        user.setId(userId);
-        return userRepository.save(user);
+    public UserDto saveUser(@Validated @RequestBody UserDto userDto) {
+        // TODO (Matthäus): This is quite some logic and should go into an application or even domain service.
+        // TODO (Matthäus): The userId should be given by the backend and not by the frontend.
+        // TODO (Matthäus): This whole thing will probably go away once we have proper user management.
+        Long nextUserId = ((List<User>) IUserRepository.findAll()).
+                stream().
+                map(User::getId).
+                max(Long::compareTo).orElse(0L) + 1;
+        User newUser = new User();
+        newUser.setName(userDto.getName());
+        newUser.setId(nextUserId);
+        return toUserDto(IUserRepository.save(newUser));
     }
 
     @DeleteMapping("/users/{id}")
     public Map<String, Boolean> deleteUserById(@PathVariable long id) {
-        System.out.println("Delete user.");
-        Optional<User> user = userRepository.findById(id);
+        Optional<User> user = IUserRepository.findById(id);
 
         Map<String, Boolean> response = new HashMap<>();
 
         if (user.isPresent()) {
-            userRepository.delete(user.get());
+            IUserRepository.delete(user.get());
             response.put("deleted", TRUE);
         } else {
             response.put("deleted", FALSE);
@@ -78,5 +92,9 @@ public class UserController {
                 "</pre>\n" +
                 "</body>\n" +
                 "</html>";
+    }
+
+    private static UserDto toUserDto(User user) {
+        return modelMapper.map(user, UserDto.class);
     }
 }

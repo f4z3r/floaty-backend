@@ -1,6 +1,6 @@
 package ch.floaty;
 
-import ch.floaty.application.FloatyApplication;
+import ch.floaty.run.FloatyApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;

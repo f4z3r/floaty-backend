@@ -1,4 +1,4 @@
-package ch.floaty.application;
+package ch.floaty.run;
 
 import ch.floaty.config.FloatyApplicationConfig;
 import org.springframework.boot.SpringApplication;

@@ -10,7 +10,7 @@ public class Flight {
         this.user = user;
         this.takeoff = takeoff;
         this.duration = duration;
-        this.flightdate = date;
+        this.date = date;
     }
 
     public Flight() {
@@ -23,15 +23,15 @@ public class Flight {
     @JoinColumn(name = "userid")
     private User user;
 
-    public String getFlightdate() {
-        return flightdate;
+    public String getDate() {
+        return date;
     }
 
-    public void setFlightdate(String flightdate) {
-        this.flightdate = flightdate;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    private String flightdate;
+    private String date;
 
     private String takeoff;
 

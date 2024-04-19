@@ -8,7 +8,6 @@ RUN mvn verify --fail-never
 COPY src src
 RUN mvn clean package
 
-
 # ----- Package stage
 
 # Note: arm46 image

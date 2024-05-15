@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: floaty-backend
 spec:
-  replicas: 1
+  replicas: 10
   revisionHistoryLimit: 3
   selector:
     matchLabels:
